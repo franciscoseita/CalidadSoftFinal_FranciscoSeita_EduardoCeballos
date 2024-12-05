@@ -7,10 +7,10 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0  # Imagen base con Java 17
     steps:
-      - checkout  # Descarga el código fuente
+      - checkout
       - run:
           name: Install Dependencies
-          command: mvn dependency:resolve  # Asegura que las dependencias estén disponibles
+          command: mvn dependency:resolve
       - run:
           name: Run Unit Tests (UserServiceTest)
           command: mvn test -Dtest=com.mayab.quality.unittest.service.UserServiceTest -e -X
@@ -47,14 +47,6 @@ jobs:
             echo "SELECT * FROM usuarios;" | mysql -h 127.0.0.1 -uroot -p123456 dbunit
             echo "done"
       - run:
-          name: Verify MySQL is Ready for Tests
-          command: |
-            mysql -h 127.0.0.1 -P 3306 -u root -p123456 -e "SELECT 1;"
-      - run:
-          name: Verify Tables in Database
-          command: |
-            mysql -h 127.0.0.1 -P 3306 -u root -p123456 -e "SHOW TABLES;" dbunit
-      - run:
           name: Run Integration Test
           command: mvn test -Dtest=com.mayab.quality.integration.UserServiceTest -e -X
       - run:
@@ -90,11 +82,31 @@ jobs:
           name: Notify
           command: echo "Selenium Tests completed successfully."
 
+  deploy:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - run:
+          name: Deployment Step
+          command: echo "Deployment successful for main branch!"
+
 # Orchestrate jobs using workflows
 workflows:
   version: 2
-  test-workflow:
+  test-and-deploy:
     jobs:
       - run-unit-tests
-      - run-integration-test
-      - run-selenium-tests
+      - run-integration-test:
+          requires:
+            - run-unit-tests
+      - run-selenium-tests:
+          requires:
+            - run-integration-test
+      - deploy:
+          requires:
+            - run-selenium-tests
+          filters:
+            branches:
+              only:
+                - main
+
