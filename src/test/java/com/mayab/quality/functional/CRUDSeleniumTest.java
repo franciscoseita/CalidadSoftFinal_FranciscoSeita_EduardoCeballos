@@ -59,6 +59,7 @@ public class CRUDSeleniumTest {
     assertThat(actualResult, is("Successfully added!"));
   }
 
+	
   @Order(2)
   @Test
   public void existingEmail_test() throws Exception {
