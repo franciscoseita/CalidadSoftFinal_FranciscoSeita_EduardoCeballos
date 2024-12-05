@@ -97,7 +97,6 @@ workflows:
     jobs:
       - run-unit-tests
       - run-integration-test
-      - run-selenium-testso change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+      - run-selenium-tests
     jobs:
       - say-hello
