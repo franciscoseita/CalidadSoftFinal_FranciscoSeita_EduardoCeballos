@@ -98,5 +98,3 @@ workflows:
       - run-unit-tests
       - run-integration-test
       - run-selenium-tests
-    jobs:
-      - say-hello
