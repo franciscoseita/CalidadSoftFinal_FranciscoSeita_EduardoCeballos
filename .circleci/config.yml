@@ -3,6 +3,21 @@ version: 2.1
 
 # Define jobs to be invoked later in a workflow.
 jobs:
+  check-tests-build:
+    docker:
+      - image: cimg/openjdk:17.0  # Base image with Java 17
+    steps:
+      - checkout  # Check out the code
+      - run:
+          name: Install Dependencies
+          command: mvn dependency:resolve  # Ensure dependencies are resolved
+      - run:
+          name: Compile All Tests
+          command: mvn test-compile  # Verifies that test classes compile correctly
+      - run:
+          name: Notify
+          command: echo "All tests were successfully compiled."
+
   run-unit-tests:
     docker:
       - image: cimg/openjdk:17.0  # Imagen base con Java 17
@@ -95,7 +110,10 @@ workflows:
   version: 2
   test-and-deploy:
     jobs:
-      - run-unit-tests
+      - check-tests-build  # New job to ensure all tests are compiled
+      - run-unit-tests:
+          requires:
+            - check-tests-build
       - run-integration-test:
           requires:
             - run-unit-tests
@@ -109,4 +127,3 @@ workflows:
             branches:
               only:
                 - main
-
