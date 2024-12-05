@@ -44,10 +44,10 @@ public class CRUDSeleniumTest {
     driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
     driver.findElement(By.name("name")).click();
     driver.findElement(By.name("name")).clear();
-    driver.findElement(By.name("name")).sendKeys("Changuito");
+    driver.findElement(By.name("name")).sendKeys("Francisco");
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("changuito@hotmail.com");
+    driver.findElement(By.name("email")).sendKeys("francisco@hotmail.com");
     driver.findElement(By.name("age")).click();
     driver.findElement(By.name("age")).clear();
     driver.findElement(By.name("age")).sendKeys("18");
@@ -59,6 +59,7 @@ public class CRUDSeleniumTest {
     assertThat(actualResult, is("Successfully added!"));
   }
 
+	
   @Order(2)
   @Test
   public void existingEmail_test() throws Exception {
@@ -66,10 +67,10 @@ public class CRUDSeleniumTest {
     driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
     driver.findElement(By.name("name")).click();
     driver.findElement(By.name("name")).clear();
-    driver.findElement(By.name("name")).sendKeys("Changuito");
+    driver.findElement(By.name("name")).sendKeys("Francisco");
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("changuito@hotmail.com");
+    driver.findElement(By.name("email")).sendKeys("francisco@hotmail.com");
     driver.findElement(By.name("age")).click();
     driver.findElement(By.name("age")).clear();
     driver.findElement(By.name("age")).sendKeys("18");
@@ -90,7 +91,7 @@ public class CRUDSeleniumTest {
       boolean recordFound = false;
 
       for (WebElement row : rows) {
-          if (row.getText().contains("Changuito")) {
+          if (row.getText().contains("Francisco")) {
               recordFound = true;
 
               WebElement editButton = row.findElement(By.xpath(".//td[5]/button[1]"));
@@ -109,14 +110,14 @@ public class CRUDSeleniumTest {
           }
       }
 
-      assertTrue("No se encontró el registro 'Changuito' en la tabla.", recordFound);
+      assertTrue("No se encontró el registro 'Francisco' en la tabla.", recordFound);
 
       String actualResult = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[4]/div/p")).getText();
       assertThat(actualResult, is("Successfully updated!"));
       
       boolean ageUpdated = driver.findElements(By.xpath("//table/tbody/tr"))
                                   .stream()
-                                  .anyMatch(row -> row.getText().contains("Changuito") && row.getText().contains("25"));
+                                  .anyMatch(row -> row.getText().contains("Francisco") && row.getText().contains("25"));
       assertTrue("La edad no fue actualizada correctamente.", ageUpdated);
   }
 
@@ -127,7 +128,7 @@ public class CRUDSeleniumTest {
 	  driver.get("https://mern-crud-mpfr.onrender.com/");
 	  pause(5000);
 
-	  String targetName = "Changuito";
+	  String targetName = "Francisco";
 	  
 	  WebElement table = driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody"));
 	  
@@ -147,7 +148,7 @@ public class CRUDSeleniumTest {
       boolean recordFound = false;
 
       for (WebElement row : rows) {
-          if (row.getText().contains("Changuito")) {
+          if (row.getText().contains("Francisco")) {
               recordFound = true;
 
               WebElement deleteButton = row.findElement(By.xpath(".//td[5]/button[2]"));
@@ -161,12 +162,12 @@ public class CRUDSeleniumTest {
           }
       }
 
-      assertTrue("No se encontró el registro 'Changuito' en la tabla.", recordFound);
+      assertTrue("No se encontró el registro 'Francisco' en la tabla.", recordFound);
 
       boolean isPresent = driver.findElements(By.xpath("//table/tbody/tr"))
                                .stream()
-                               .anyMatch(row -> row.getText().contains("Changuito"));
-      assertFalse("El registro 'Changuito' todavía está presente en la tabla.", isPresent);
+                               .anyMatch(row -> row.getText().contains("Francisco"));
+      assertFalse("El registro 'Francisco' todavía está presente en la tabla.", isPresent);
   }
   
   @Order(6)
